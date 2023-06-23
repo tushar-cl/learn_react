@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "form_datas",
+  "info": {
+    "singularName": "form-data",
+    "pluralName": "form-datas",
+    "displayName": "Form Data",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "select_time": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string"
+    }
+  }
+}
