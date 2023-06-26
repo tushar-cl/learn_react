@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState , useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch ,useSelector} from 'react-redux';
 import { postFormData , getFormData} from '../features/formData/formSlice';
@@ -8,21 +8,12 @@ const Form = () => {
   const dispatch = useDispatch();
   const navigation  = new useNavigate();
 
-
   const formData = useSelector((state) => state.form.formData);
   const status = useSelector((state) => state.form.status);
   const error = useSelector((state) => state.form.error);
-  const [authenticated, setAuthenticated] = useState(false);
-  console.log("faisfihishf",formData.data , status)
 
   useEffect(() => {
     dispatch(getFormData());
-    const token = localStorage.getItem('token');
-    if (token) {
-      setAuthenticated(true);
-    } else {
-      setAuthenticated(false);
-    }
   }, []);
  
 
@@ -68,16 +59,15 @@ const Form = () => {
       time: `${hour}:${minute} ${ampm}`,
     };
     dispatch(postFormData(newData));
-
+    dispatch(getFormData())
     setName('');
     setOption('');
     setHour('');
-    setMinute('');
+    setMinute(''); 
     setAmPm('');
   };
 
   const navigate =()=>{
-    console.log('navigate')
     navigation('/home' , {state: formData})
   }
 

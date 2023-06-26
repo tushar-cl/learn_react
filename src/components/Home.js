@@ -1,9 +1,11 @@
 import React from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 
 const Home = (state) => {
-    const location = useLocation();
-    console.log(location.state)
+  const navigate = new useNavigate()
+    const formData = useSelector((state) => state.form.formData);
+    console.log(formData)
     const back=()=>{
       navigate('/form')
     } 
@@ -20,11 +22,11 @@ const Home = (state) => {
           </tr>
         </thead>
         <tbody>
-          {location.state.map((data, index) => (
+          {formData.data.map((data, index) => (
             <tr key={index}>
-              <td>{data.name}</td>
-              <td>{data.option}</td>
-              <td>{data.time}</td>
+              <td>{data.attributes.name}</td>
+              <td>{data.attributes.option}</td>
+              <td>{data.attributes.time}</td>
             </tr>
           ))}
         </tbody>

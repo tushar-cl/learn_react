@@ -1,27 +1,25 @@
 import { createSlice , createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import axiosInstance from '../../components/api/api_instance';
 
 const post_URL  = 'http://localhost:1337/api/form-datas'
-const get_URL = 'http://localhost:1337/api/form-datas'
 
 export const postFormData = createAsyncThunk('post/fecthpost' , async(formData) =>{
-  const options = {
-    method: 'POST',
+  const response = await axiosInstance({
+      method: 'POST',
     url: post_URL,
-    headers: {'Content-Type': 'application/json'},
     data: {data: {name: formData.name, select_time: formData.option , time :formData.time}}
-  };
-  const response = await axios.request(options)
+  })
   return response.data
 })
 
 export const getFormData = createAsyncThunk('get/fecthget', async () => {
-  const options = {
+  const response = await axiosInstance({
     method: 'GET',
-    url: get_URL,
-    headers: { 'Content-Type': 'application/json' },
-  };
-  const response = await axios.request(options);
+    url: '/form-datas',
+  })
+    // const options = {
+  
   return response.data;
 });
 

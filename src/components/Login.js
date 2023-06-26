@@ -1,30 +1,27 @@
-import React, { useState , useEffect} from 'react';
-import axios from 'axios';
+import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch , useSelector} from 'react-redux';
+import { login } from '../features/formData/loginSlice';
 
 function Login() {
-    const navigate = new useNavigate()
+  const navigate = new useNavigate()
+  const dispatch = useDispatch();
+  const loginRes = useSelector((state) => state.login.loginRes);
+  const loginStatus = useSelector((state) => state.login.status);
+  if(loginStatus == 'succeeded'){
+    navigate('/form')
+  }
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     async function handleSubmit(event){
         event.preventDefault();
-        console.log(email , password)
-        try {
-            const options = {
-                method: 'POST',
-                url: 'http://localhost:1337/api/auth/local',
-                headers: {'Content-Type': 'application/json'},
-                data: {identifier: email, password}
-              };
-              
-              const response = await axios.request(options)
-              if(response.status==200){
-                localStorage.setItem('token', response.data.jwt);
-                navigate('/form')
-              }
-        } catch (error) {
-            alert(error.response.data.error.message)
+        const credential = {
+          identifier:email,
+          password:password
         }
+        dispatch(login(credential))
     }
   return (
     <>
