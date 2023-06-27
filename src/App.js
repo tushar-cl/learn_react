@@ -12,13 +12,14 @@ import { useEffect } from 'react';
 
 
 function App() {
+
   return (
     <div className="App">
       <Router>
         <Routes>
-        <Route path ='/' element={<Login/>}/>
-          <Route path ='/form' element={<Form/>}/>
-          <Route path ='/home' element={<Home/>}/>
+          <Route path='/' element={<Login />} />
+          <Route path='/form' element={<Form />} />
+          <Route path='/home' element={<Home />} />
         </Routes>
       </Router>
     </div>

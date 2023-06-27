@@ -1,14 +1,14 @@
-import { createSlice , createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import axiosInstance from '../../components/api/api_instance';
+import { axiosInstance } from '../../components/api/api_instance';
 
-const post_URL  = 'http://localhost:1337/api/form-datas'
+const post_URL = 'http://localhost:1337/api/form-datas'
 
-export const postFormData = createAsyncThunk('post/fecthpost' , async(formData) =>{
+export const postFormData = createAsyncThunk('post/fecthpost', async (formData) => {
   const response = await axiosInstance({
-      method: 'POST',
+    method: 'POST',
     url: post_URL,
-    data: {data: {name: formData.name, select_time: formData.option , time :formData.time}}
+    data: { data: { name: formData.name, select_time: formData.option, time: formData.time } }
   })
   return response.data
 })
@@ -18,8 +18,7 @@ export const getFormData = createAsyncThunk('get/fecthget', async () => {
     method: 'GET',
     url: '/form-datas',
   })
-    // const options = {
-  
+
   return response.data;
 });
 
@@ -28,8 +27,8 @@ const formSlice = createSlice({
   name: 'form',
   initialState: {
     formData: [],
-    status:'idle',
-    error:null
+    status: 'idle',
+    error: null
   },
 
   reducers: {
@@ -62,7 +61,7 @@ const formSlice = createSlice({
         state.error = action.error.message;
       });
   }
-  
+
 });
 
 export const { setFormData } = formSlice.actions;

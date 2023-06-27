@@ -2,6 +2,8 @@ import React, { useState , useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { useDispatch ,useSelector} from 'react-redux';
 import { postFormData , getFormData} from '../features/formData/formSlice';
+import {logoutAction} from '../features/formData/loginSlice'
+
 
 
 const Form = () => {
@@ -11,6 +13,10 @@ const Form = () => {
   const formData = useSelector((state) => state.form.formData);
   const status = useSelector((state) => state.form.status);
   const error = useSelector((state) => state.form.error);
+
+  if(status === 'failed'){
+    navigation('/')
+  }
 
   useEffect(() => {
     dispatch(getFormData());
@@ -67,12 +73,18 @@ const Form = () => {
     setAmPm('');
   };
 
+  const handleLogout = ()=>{
+    dispatch(logoutAction())
+    navigation('/')
+  }
+
   const navigate =()=>{
     navigation('/home' , {state: formData})
   }
 
   return (
     <div>
+      <button onClick={handleLogout}>Logout</button>
       <form onSubmit={handleSubmit}>
         <label>
           Name:
@@ -123,7 +135,7 @@ const Form = () => {
             </tr>
           </thead>
           <tbody>
-            {formData.data.map((data, index) => (
+            {status !== 'failed' && formData.data.map((data, index) => (
               <tr key={index}>
                 <td>{data.attributes.name}</td>
                 <td>{data.attributes.select_time}</td>

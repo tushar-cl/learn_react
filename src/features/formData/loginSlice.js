@@ -1,36 +1,53 @@
-import { createSlice , createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {axiosInstance, configureAxiosInterceptors, resetAxiosInterceptors} from '../../components/api/api_instance';
 
-export const login = createAsyncThunk('post/login' , (credential) =>{
-    const options = {
-      method: 'POST',
-      url: 'http://localhost:1337/api/auth/local',
-      headers: {'Content-Type': 'application/json'},
-      data: credential
-    };
-    return axios.request(options)
+export const login = createAsyncThunk('post/login', (credential) => {
+  console.log('login thunk called');
+  return axiosInstance({
+    method: 'POST',
+    url: '/auth/local',
+    data: credential
   })
+})
 
 const loginSlice = createSlice({
   name: 'login',
   initialState: {
-    loginRes: [],
-    status:'idle',
-    error:null
+    loginRes: null,
+    status: 'idle',
+    error: null
   },
 
   reducers: {
-   
+    setError:(state)=>{
+      state.status='idle'
+      state.error=null
+      state.loginRes = null;
+      localStorage.clear();
+
+    },
+    logoutAction : (state) =>{
+      state.status = 'idle'
+      state.error = null;
+      state.loginRes = null
+      localStorage.clear();
+      resetAxiosInterceptors();
+    }
   },
-  extraReducers (builder) {
+  extraReducers(builder) {
     builder
-    .addCase(login.pending, (state) => {
+      .addCase(login.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(login.fulfilled, (state, action) => {
-        console.log("action" , action.payload)
+        console.log("action", action.payload)
         state.status = 'succeeded';
-        state.loginRes.push(action.payload.data)
+        state.loginRes = action.payload;
+        
+        localStorage.setItem("jwt", action.payload.data.jwt);
+        localStorage.setItem("user", JSON.stringify(action.payload.data.user));
+        configureAxiosInterceptors();
+        //call configureAxiosInterceptor(state)
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
@@ -38,8 +55,8 @@ const loginSlice = createSlice({
       })
   }
 
-  
+
 });
 
-// export const { setFormData } = formSlice.actions;
+export const { setError , logoutAction} = loginSlice.actions;
 export default loginSlice.reducer;
